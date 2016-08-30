@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags always come first -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+		<link rel="stylesheet" href="https://bootswatch.com/cosmo/bootstrap.min.css">
+		<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+	</head>
+
+	<body>
+		
+		<div class="well bs-component">
+			<div class="form-group">
+				<input type="file" id="file">
+			</div>
+			<div class="form-group">
+				<a id="download" download="somedata.csv" href="data:application/csv;charset=utf-8,Col1%2CCol2%2CCol3%0AVal1%2CVal2%2CVal3%0AVal11%2CVal22%2CVal33%0AVal111%2CVal222%2Candrew@planmyretirement.com" class="btn btn-primary">Download</a>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		$(document).ready(function() {
+
+			$('#file').change(function(e) {
+				var file = e.target.files[0];
+				var papa = Papa.parse(file, {
+					header: false,
+					dynamicTyping: true,
+					complete: function(results) {
+						console.log(results.data)
+
+						// replace column headers
+						for (var i in results.data[0]) {
+							if (results.data[0][i] == 'First Name') {
+								results.data[0][i] = 'First';
+							}
+							else if (results.data[0][i] == 'Last Name') {
+								results.data[0][i] = 'Last';
+							} else if (results.data[0][i] == 'School District') {
+								results.data[0][i] = 'School';
+							}
+
+							// track email index
+							if (results.data[0][i] == 'Email') {
+								var emailIndex = i;
+							}
+						}
+
+						// clone email column
+						results.data[0].push('Mail');
+						for (var i = 1; i < results.data.length; i++) {
+							results.data[i].push(results.data[i][emailIndex]);
+						}
+
+						console.log(results.data)
+
+						var unparsed = Papa.unparse(results.data);
+
+						console.log(unparsed);
+						console.log(unparsed.replace(/,/g, '%2C').replace(/(?:\r\n|\r|\n)/g, '%0D%0A'))
+						var csvData = 'data:application/csv;charset=utf-8,' + unparsed.replace(/,/g, '%2C').replace(/(?:\r\n|\r|\n)/g, '%0D%0A');
+						$('#download').attr('href', csvData);
+					}
+				});
+			});
+		});
+	</script>
+
+</html>
