@@ -7,8 +7,11 @@
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 
 		<link rel="stylesheet" href="https://bootswatch.com/cosmo/bootstrap.min.css">
+		<link rel="stylesheet" href="https://rawgit.com/jaysalvat/ezdz/master/dist/jquery.ezdz.min.css">
+
 		<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+		<script src="https://rawgit.com/jaysalvat/ezdz/master/dist/jquery.ezdz.min.js"></script>
 	</head>
 
 	<body>
@@ -28,6 +31,8 @@
 
 	<script>
 		$(document).ready(function() {
+
+			$('input[type="file"]').ezdz();
 
 			$('#file').change(function(e) {
 				var file = e.target.files[0];
