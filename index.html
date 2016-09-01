@@ -54,7 +54,7 @@
 					header: false,
 					dynamicTyping: true,
 					complete: function(results) {
-						console.log(results.data)
+						// console.log(results.data)
 
 						// replace column headers
 						for (var i in results.data[0]) {
@@ -80,6 +80,7 @@
 						}
 
 						// if reply is set, add reply column
+						console.log($('#reply').val().length);
 						if ($('#reply').val().length > 0) {
 							results.data[0].push('Reply');
 							for (var i = 1; i < results.data.length; i++) {
@@ -87,17 +88,17 @@
 							}
 						}
 
-						console.log(results.data)
+						// console.log(results.data)
 
 						var unparsed = Papa.unparse(results.data);
 
-						console.log(unparsed);
-						console.log(unparsed.replace(/,/g, '%2C').replace(/(?:\r\n|\r|\n)/g, '%0D%0A'))
+						// console.log(unparsed);
+						// console.log(unparsed.replace(/,/g, '%2C').replace(/(?:\r\n|\r|\n)/g, '%0D%0A'))
 						var csvData = new Blob([unparsed], { type: 'text/csv' }); 
 
 						// update download button & file name
 						var today = new Date();
-						var dateString = (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getYear();
+						var dateString = (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getFullYear();
 						$('#download').attr({
 							download: $('#file-name').val() + ' ' + dateString + '.csv',
 							href: URL.createObjectURL(csvData),
