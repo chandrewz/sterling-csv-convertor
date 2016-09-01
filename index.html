@@ -17,8 +17,22 @@
 	<body>
 		
 		<div class="well bs-component">
+			<h3>a CSV helper for sn-fg</h3>
+			<h4>Step 1: File name. Step 2: Reply to. Step 3: Upload file.</h4>
 			<div class="form-group">
+				<label>File Name</label>
 				<input type="text" id="file-name" placeholder="File Name (School District)" class="form-control">
+			</div>
+			<div class="form-group">
+				<label>Reply To</label>
+				<select id="reply" class="form-control">
+					<option></option>
+					<option>hayden@s-nfg.com</option>
+					<option>ethan@s-nfg.com</option>
+					<option>rory@s-nfg.com</option>
+					<option>Madison@s-nfg.com</option>
+					<option>brody@s-nfg.com</option>
+				</select>
 			</div>
 			<div class="form-group">
 				<input type="file" id="file">
@@ -65,6 +79,14 @@
 							results.data[i].push(results.data[i][emailIndex]);
 						}
 
+						// if reply is set, add reply column
+						if ($('#reply').val().length > 0) {
+							results.data[0].push('Reply');
+							for (var i = 1; i < results.data.length; i++) {
+								results.data[i].push($('#reply').val());
+							}
+						}
+
 						console.log(results.data)
 
 						var unparsed = Papa.unparse(results.data);
@@ -73,7 +95,7 @@
 						console.log(unparsed.replace(/,/g, '%2C').replace(/(?:\r\n|\r|\n)/g, '%0D%0A'))
 						var csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(unparsed);
 
-						// update download button
+						// update download button & file name
 						$('#download').attr('href', csvData);
 						var today = new Date();
 						var dateString = (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getYear();
