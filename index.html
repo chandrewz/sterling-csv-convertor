@@ -38,7 +38,7 @@
 				<input type="file" id="file">
 			</div>
 			<div class="form-group">
-				<a id="download" download="somedata.csv" href="data:application/csv;charset=utf-8,Col1%2CCol2%2CCol3%0AVal1%2CVal2%2CVal3%0AVal11%2CVal22%2CVal33%0AVal111%2CVal222%2Candrew@planmyretirement.com" class="btn btn-primary">Download</a>
+				<a id="download" download="somedata.csv" href="data:application/csv;charset=utf-8,Col1%2CCol2%2CCol3%0AVal1%2CVal2%2CVal3%0AVal11%2CVal22%2CVal33%0AVal111%2CVal222%2Candrew@planmyretirement.com" class="btn btn-primary hidden">Download</a>
 			</div>
 		</div>
 	</body>
@@ -93,14 +93,18 @@
 
 						console.log(unparsed);
 						console.log(unparsed.replace(/,/g, '%2C').replace(/(?:\r\n|\r|\n)/g, '%0D%0A'))
-						var csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(unparsed);
+						var csvData = new Blob([unparsed], { type: 'text/csv' }); 
 
 						// update download button & file name
-						$('#download').attr('href', csvData);
 						var today = new Date();
 						var dateString = (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getYear();
-						$('#download').attr('download', $('#file-name').val() + ' ' + dateString + '.csv');
-						$('#download').text('Download: ' + $('#file-name').val() + ' ' + dateString);
+						$('#download').attr({
+							download: $('#file-name').val() + ' ' + dateString + '.csv',
+							href: URL.createObjectURL(csvData),
+							target: '_blank'
+						}).text(
+							'Download: ' + $('#file-name').val() + ' ' + dateString
+						).removeClass('hidden');
 					}
 				});
 			});
